@@ -6,97 +6,90 @@ const FiltroSenadores = ({ senadores, onFiltrar }) => {
     'PARTIDO O ALIANZA': [],
     PROVINCIA: []
   });
-  const [desplegables, setDesplegables] = useState({
-    BLOQUE: false,
-    'PARTIDO O ALIANZA': false,
-    PROVINCIA: false
-  });
-  const [opcionesDisponibles, setOpcionesDisponibles] = useState({
-    BLOQUE: [],
-    'PARTIDO O ALIANZA': [],
-    PROVINCIA: []
-  });
+  const [desplegableActivo, setDesplegableActivo] = useState(null);
 
-  // Lógica para actualizar las opciones disponibles basada en senadores filtrados
-  useEffect(() => {
-    const bloques = new Set(senadores.map(s => s.BLOQUE));
-    const alianzas = new Set(senadores.map(s => s['PARTIDO O ALIANZA']));
-    const provincias = new Set(senadores.map(s => s.PROVINCIA));
+  // Actualizar las opciones disponibles basadas en los senadores filtrados
+  const actualizarOpcionesDisponibles = () => {
+    const bloques = new Set();
+    const alianzas = new Set();
+    const provincias = new Set();
 
-    setOpcionesDisponibles({
+    senadores.forEach(senador => {
+      bloques.add(senador.BLOQUE);
+      alianzas.add(senador['PARTIDO O ALIANZA']);
+      provincias.add(senador.PROVINCIA);
+    });
+
+    return {
       BLOQUE: Array.from(bloques),
       'PARTIDO O ALIANZA': Array.from(alianzas),
       PROVINCIA: Array.from(provincias)
-    });
-  }, [senadores]);
+    };
+  };
+
+  const opcionesDisponibles = actualizarOpcionesDisponibles();
 
   const manejarCambioCheckbox = (categoria, valor) => {
-    const actualizado = filtros[categoria].includes(valor)
-      ? filtros[categoria].filter(v => v !== valor)
-      : [...filtros[categoria], valor];
-    
-    const nuevosFiltros = { ...filtros, [categoria]: actualizado };
+    const nuevosFiltros = { ...filtros };
+    if (nuevosFiltros[categoria].includes(valor)) {
+      nuevosFiltros[categoria] = nuevosFiltros[categoria].filter(v => v !== valor);
+    } else {
+      nuevosFiltros[categoria].push(valor);
+    }
     setFiltros(nuevosFiltros);
-    
-    // Filtrar senadores basado en nuevos filtros y notificar al componente padre
     onFiltrar(nuevosFiltros);
   };
 
   const toggleDesplegable = (categoria) => {
-    setDesplegables(prevState => ({ ...prevState, [categoria]: !prevState[categoria] }));
+    setDesplegableActivo(desplegableActivo === categoria ? null : categoria);
   };
 
-  // Función para limpiar todos los filtros
-  const limpiarFiltros = () => {
-    setFiltros({
-      BLOQUE: [],
-      'PARTIDO O ALIANZA': [],
-      PROVINCIA: []
-    });
-    // Restablecer a todos los senadores
-    onFiltrar({
-      BLOQUE: [],
-      'PARTIDO O ALIANZA': [],
-      PROVINCIA: []
-    });
+  const eliminarFiltro = (categoria, valor) => {
+    const nuevosFiltros = { ...filtros, [categoria]: filtros[categoria].filter(v => v !== valor) };
+    setFiltros(nuevosFiltros);
+    onFiltrar(nuevosFiltros);
   };
 
   return (
     <div className="flex flex-col space-y-4">
-      {Object.keys(opcionesDisponibles).map((categoria) => (
+      {Object.keys(opcionesDisponibles).map(categoria => (
         <div key={categoria} className="relative">
           <button
             onClick={() => toggleDesplegable(categoria)}
             className="w-full py-2 px-4 bg-gray-200 rounded-md hover:bg-gray-300 flex justify-between items-center"
           >
             {categoria}
-            <i className={`ri-arrow-${desplegables[categoria] ? 'up' : 'down'}-s-line`}></i>
+            <i className={`ri-arrow-${desplegableActivo === categoria ? 'up' : 'down'}-s-line`}></i>
           </button>
-          {desplegables[categoria] && (
-            <div className="absolute z-10 bg-white border rounded shadow-lg mt-1 w-full overflow-auto">
-              {opcionesDisponibles[categoria].map((opcion) => (
-                <div key={opcion} className="p-2">
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={filtros[categoria].includes(opcion)}
-                      onChange={() => manejarCambioCheckbox(categoria, opcion)}
-                      className="form-checkbox mr-2"
-                    />
-                    {opcion}
-                  </label>
-                </div>
+          {desplegableActivo === categoria && (
+            <div className="absolute z-10 bg-white border rounded shadow-lg mt-1 w-full max-h-60 overflow-auto">
+              {opcionesDisponibles[categoria].map(opcion => (
+                <label key={opcion} className="flex items-center p-2">
+                  <input
+                    type="checkbox"
+                    checked={filtros[categoria].includes(opcion)}
+                    onChange={() => manejarCambioCheckbox(categoria, opcion)}
+                    className="form-checkbox mr-2"
+                  />
+                  {opcion}
+                </label>
               ))}
             </div>
           )}
         </div>
       ))}
-      <button
-        onClick={limpiarFiltros}
-        className="py-2 px-4 bg-red-500 text-white rounded-md hover:bg-red-700 mt-4 self-start"
-      >
-        Limpiar Filtros
-      </button>
+      <div className="flex flex-wrap gap-2">
+        {Object.keys(filtros).flatMap(categoria =>
+          filtros[categoria].map(valor => (
+            <div key={`${categoria}-${valor}`} className="flex items-center bg-blue-500 text-white px-2 py-1 rounded-full">
+              {valor}
+              <button onClick={() => eliminarFiltro(categoria, valor)} className="ml-2 text-sm">
+                <i className="ri-close-line"></i>
+              </button>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 };
