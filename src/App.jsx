@@ -1,5 +1,5 @@
 import './App.css';
-import SenadoresList from './CardSenador.jsx';
+import SenadoresList from './SenadoresList.jsx';
 function App() {
   return (
     <>
