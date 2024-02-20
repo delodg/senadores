@@ -34,7 +34,7 @@ const FiltroSenadores = ({ senadores, onFiltrar }) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="grid grid-cols-3 justify-between items-start gap-5 text-left">
       {['BLOQUE', 'PARTIDO O ALIANZA', 'PROVINCIA'].map((categoria) => (
         <div key={categoria}>
           <button

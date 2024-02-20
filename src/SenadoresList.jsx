@@ -17,9 +17,9 @@ const SenadoresList = () => {
   };
 
   return (
-    <div>
+    <div className='flex flex-col gap-5'>
       <FiltroSenadores senadores={senadoresData.table.rows} onFiltrar={handleFiltrar} />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {senadoresFiltrados.map(senador => (
           <SenadorCard key={senador.ID} senador={senador} />
         ))}
