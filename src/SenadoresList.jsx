@@ -1,34 +1,26 @@
-// Importaciones necesarias
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import SenadorCard from './SenadorCard';
 import FiltroSenadores from './FiltroSenadores';
-import senadoresData from './data/senadores.json'; // Asegúrate de ajustar la ruta según tu estructura de archivos
+import senadoresData from './data/senadores.json'; // Ajusta la ruta según tu estructura de carpetas
 
 const SenadoresList = () => {
-  const [senadores, setSenadores] = useState([]);
-  const [filtro, setFiltro] = useState({ categoria: '', valor: '' });
+  const [senadoresFiltrados, setSenadoresFiltrados] = useState(senadoresData.table.rows);
 
-  useEffect(() => {
-    setSenadores(senadoresData.table.rows); // Ajusta esta línea según la estructura de tu JSON
-  }, []);
-
-  const onFiltrar = (filtro) => {
-    const { categoria, valor } = filtro;
-    if (valor === '') {
-      setSenadores(senadoresData.table.rows); // Restablece a todos los senadores si el filtro está vacío
-    } else {
-      const senadoresFiltrados = senadoresData.table.rows.filter((senador) =>
-        senador[categoria]?.toUpperCase().includes(valor.toUpperCase())
-      );
-      setSenadores(senadoresFiltrados);
-    }
+  const handleFiltrar = (filtros) => {
+    const filtrados = senadoresData.table.rows.filter(senador => {
+      return Object.keys(filtros).every(categoria => {
+        if (filtros[categoria].length === 0) return true; // Si no hay filtros en la categoría, incluir todos
+        return filtros[categoria].includes(senador[categoria]);
+      });
+    });
+    setSenadoresFiltrados(filtrados);
   };
 
   return (
     <div>
-      <FiltroSenadores onFiltrar={onFiltrar} />
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {senadores.map((senador) => (
+      <FiltroSenadores senadores={senadoresData.table.rows} onFiltrar={handleFiltrar} />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {senadoresFiltrados.map(senador => (
           <SenadorCard key={senador.ID} senador={senador} />
         ))}
       </div>
