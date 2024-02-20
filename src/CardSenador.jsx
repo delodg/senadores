@@ -53,7 +53,7 @@ const SenadorCard = ({ senador }) => {
 
 const SenadoresList = () => {
   return (
-    <div className="flex flex-wrap justify-center">
+    <div className="grid grid-cols-2  justify-center">
       {senadoresData.table.rows.map((senador) => (
         <SenadorCard key={senador.ID} senador={senador} />
       ))}
