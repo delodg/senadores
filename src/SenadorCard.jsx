@@ -2,68 +2,28 @@ import React from 'react';
 
 const SenadorCard = ({ senador }) => {
   return (
-    <div className="senador-card" style={styles.card}>
-      <img src={senador.FOTO} alt={`${senador.NOMBRE} ${senador.APELLIDO}`} style={styles.image} />
-      <div style={styles.content}>
-        <h2 style={styles.title}>{`${senador.NOMBRE} ${senador.APELLIDO}`}</h2>
-        <ul style={styles.list}>
-          <li style={styles.listItem}><i className="ri-group-line" style={styles.icon}></i>{senador.BLOQUE}</li>
-          <li style={styles.listItem}><i className="ri-home-heart-line" style={styles.icon}></i>{senador["PARTIDO O ALIANZA"]}</li>
-          <li style={styles.listItem}><i className="ri-map-pin-line" style={styles.icon}></i>{senador.PROVINCIA}</li>
-          {senador.EMAIL && <li style={styles.listItem}><i className="ri-mail-line" style={styles.icon}></i>{senador.EMAIL}</li>}
-          {senador.TELEFONO && <li style={styles.listItem}><i className="ri-phone-line" style={styles.icon}></i>{senador.TELEFONO}</li>}
-          {senador.FACEBOOK && <li style={styles.listItem}><i className="ri-facebook-circle-fill" style={styles.icon}></i><a href={senador.FACEBOOK} style={styles.link}>Facebook</a></li>}
-          {senador.INSTAGRAM && <li style={styles.listItem}><i className="ri-instagram-fill" style={styles.icon}></i><a href={senador.INSTAGRAM} style={styles.link}>Instagram</a></li>}
-          {senador.TWITTER && <li style={styles.listItem}><i className="ri-twitter-fill" style={styles.icon}></i><a href={senador.TWITTER} style={styles.link}>Twitter</a></li>}
-          {senador.YOUTUBE && <li style={styles.listItem}><i className="ri-youtube-fill" style={styles.icon}></i><a href={senador.YOUTUBE} style={styles.link}>YouTube</a></li>}
-        </ul>
+    <div className="flex flex-col w-full max-w-md bg-white shadow-lg rounded-lg overflow-hidden my-4">
+      <div className="flex justify-start items-center p-5">
+        <img src={senador.FOTO} alt={`${senador.NOMBRE} ${senador.APELLIDO}`} className="w-16 h-16 rounded-full object-cover mr-4" />
+        <div>
+          <h2 className="text-xl font-semibold text-left">{`${senador.NOMBRE} ${senador.APELLIDO}`}</h2>
+          <p className="text-gray-600 text-left">{senador.BLOQUE}</p>
+        </div>
       </div>
+      <ul className="text-sm text-gray-700 p-4 text-left">
+        <li className="mb-3"><i className="ri-government-line mr-2"></i>Partido/Alianza: {senador["PARTIDO O ALIANZA"]}</li>
+        <li className="mb-3"><i className="ri-map-pin-line mr-2"></i>Provincia: {senador.PROVINCIA}</li>
+        <li className="mb-3"><i className="ri-calendar-check-line mr-2"></i>C. Legal: {senador.C_LEGAL}</li>
+        <li className="mb-3"><i className="ri-time-line mr-2"></i>D. Legal: {senador.D_LEGAL}</li>
+        {senador.EMAIL && <li className="mb-3"><i className="ri-mail-line mr-2"></i>Email: {senador.EMAIL}</li>}
+        {senador.TELEFONO && <li className="mb-3"><i className="ri-phone-line mr-2"></i>Teléfono: {senador.TELEFONO}</li>}
+        {senador.FACEBOOK && <li className="mb-3"><i className="ri-facebook-box-fill mr-2"></i><a href={senador.FACEBOOK} className="hover:text-blue-600">Facebook</a></li>}
+        {senador.INSTAGRAM && <li className="mb-3"><i className="ri-instagram-line mr-2"></i><a href={senador.INSTAGRAM} className="hover:text-pink-600">Instagram</a></li>}
+        {senador.TWITTER && <li className="mb-3"><i className="ri-twitter-line mr-2"></i><a href={senador.TWITTER} className="hover:text-blue-400">Twitter</a></li>}
+        {senador.YOUTUBE && <li className="mb-3"><i className="ri-youtube-fill mr-2"></i><a href={senador.YOUTUBE} className="hover:text-red-600">YouTube</a></li>}
+      </ul>
     </div>
   );
-};
-
-// Estilos en JavaScript
-const styles = {
-  card: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '300px',
-    margin: '20px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    borderRadius: '8px',
-    overflow: 'hidden',
-    alignItems:'start'
-  },
-  image: {
-    width: '48px',
-    height: '48px',
-    objectFit: 'cover',
-  },
-  content: {
-    padding: '20px',
-  },
-  title: {
-    fontSize: '20px',
-    marginBottom: '10px',
-  },
-  list: {
-    listStyleType: 'none',
-    padding: 0,
-    margin: 0,
-  },
-  listItem: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: '10px',
-  },
-  icon: {
-    marginRight: '10px',
-    fontSize: '20px',
-  },
-  link: {
-    textDecoration: 'none',
-    color: '#007BFF', // Bootstrap primary color
-  },
 };
 
 export default SenadorCard;
