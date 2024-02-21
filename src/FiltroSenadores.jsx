@@ -51,9 +51,10 @@ const FiltroSenadores = ({ senadores, onFiltrar }) => {
   };
 
   return (
-    <div className="flex flex-col space-y-4">
+    <div className="flex flex-col gap-5 w-full">
+      <div className='flex flex-row w-full gap-5'>
       {Object.keys(opcionesDisponibles).map(categoria => (
-        <div key={categoria} className="relative">
+        <div key={categoria} className="relative w-full">
           <button
             onClick={() => toggleDesplegable(categoria)}
             className="w-full py-2 px-4 bg-white rounded-md hover:bg-white flex justify-between items-center"
@@ -77,7 +78,7 @@ const FiltroSenadores = ({ senadores, onFiltrar }) => {
             </div>
           )}
         </div>
-      ))}
+      ))}</div>
       <div className="flex flex-wrap gap-2">
         {Object.keys(filtros).flatMap(categoria =>
           filtros[categoria].map(valor => (
