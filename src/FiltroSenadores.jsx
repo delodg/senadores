@@ -65,7 +65,7 @@ const FiltroSenadores = ({ senadores, onFiltrar }) => {
           {desplegableActivo === categoria && (
             <div className="absolute z-10 bg-white border rounded shadow-lg mt-1 w-full max-h-60 overflow-auto">
               {opcionesDisponibles[categoria].map(opcion => (
-                <label key={opcion} className="flex items-center p-2">
+                <label key={opcion} className="flex items-center p-2 text-left">
                   <input
                     type="checkbox"
                     checked={filtros[categoria].includes(opcion)}
